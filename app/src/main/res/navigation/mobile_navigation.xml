@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_company_listing">
+
+    <fragment
+        android:id="@+id/navigation_company_listing"
+        android:name="com.luke.stockwatchlist.ui.companyListing.CompanyListingsFragment"
+        android:label="@string/title_company_listing"
+        tools:layout="@layout/fragment_company_listings" >
+
+        <action
+            android:id="@+id/action_navigationCompanyListing_to_navigationCompanyDetail"
+            app:destination="@+id/navigation_company_detail" />
+    
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_watchlist"
+        android:name="com.luke.stockwatchlist.ui.watchlist.WatchlistFragment"
+        android:label="@string/title_watchlist"
+        tools:layout="@layout/fragment_watchlist" />
+
+    <fragment
+        android:id="@+id/navigation_company_detail"
+        android:name="com.luke.stockwatchlist.ui.companyDetailed.CompanyDetailFragment"
+        android:label="Company Detail"
+        tools:layout="@layout/fragment_company_detail" >
+
+        <argument
+            android:name="symbol"
+            app:argType="string" />
+
+    </fragment>
+
+</navigation>
