@@ -2,6 +2,7 @@ package com.luke.stockwatchlist.data.repository
 
 import android.net.http.HttpException
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresExtension
 import com.luke.stockwatchlist.data.csv.CSVParser
 import com.luke.stockwatchlist.data.local.StockDatabase
@@ -99,6 +100,7 @@ class StockRepositoryImpl @Inject constructor(
     override suspend fun getCompanyInfo(symbol: String): Resource<CompanyInfo> {
         return try {
             val result = api.getCompanyInfo(symbol)
+            Log.i("StockRepositoryImpl", "Result: $result")
             Resource.Success(result.toCompanyInfo())
         } catch (e: IOException) {
             e.printStackTrace()
@@ -110,6 +112,22 @@ class StockRepositoryImpl @Inject constructor(
             Resource.Error(
                 message = "Couldn't load intra-day info"
             )
+        }
+    }
+
+    override suspend fun addToWatchlist(symbol: String) {
+        val company = dao.getCompanyBySymbol(symbol)
+        if (company != null) {
+            val updatedCompany = company.copy(isWatchlisted = true)
+            dao.insertCompanyListings(listOf(updatedCompany))
+        }
+    }
+
+    override suspend fun removeFromWatchlist(symbol: String) {
+        val company = dao.getCompanyBySymbol(symbol)
+        if (company != null) {
+            val updatedCompany = company.copy(isWatchlisted = false)
+            dao.insertCompanyListings(listOf(updatedCompany))
         }
     }
 

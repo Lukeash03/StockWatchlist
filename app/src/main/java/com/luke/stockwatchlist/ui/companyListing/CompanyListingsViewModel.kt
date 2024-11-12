@@ -65,4 +65,16 @@ class CompanyListingsViewModel @Inject constructor(
         }
     }
 
+    fun addToWatchlist(symbol: String) {
+        viewModelScope.launch {
+            repository.addToWatchlist(symbol)
+        }
+    }
+
+    fun removeFromWatchlist(symbol: String) {
+        viewModelScope.launch {
+            repository.removeFromWatchlist(symbol)
+        }
+    }
+
 }

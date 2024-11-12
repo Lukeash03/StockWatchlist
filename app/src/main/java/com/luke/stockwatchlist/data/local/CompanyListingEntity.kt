@@ -9,5 +9,6 @@ data class CompanyListingEntity(
     val symbol: String,
     val exchange: String,
     val price: String? = null,
+    var isWatchlisted: Boolean = false,
     @PrimaryKey val id: Int? = null
 )

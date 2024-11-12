@@ -23,16 +23,4 @@
         android:label="@string/title_watchlist"
         tools:layout="@layout/fragment_watchlist" />
 
-    <fragment
-        android:id="@+id/navigation_company_detail"
-        android:name="com.luke.stockwatchlist.ui.companyDetailed.CompanyDetailFragment"
-        android:label="Company Detail"
-        tools:layout="@layout/fragment_company_detail" >
-
-        <argument
-            android:name="symbol"
-            app:argType="string" />
-
-    </fragment>
-
 </navigation>
