@@ -9,12 +9,15 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.luke.stockwatchlist.R
 import com.luke.stockwatchlist.domain.model.CompanyInfo
+import com.luke.stockwatchlist.domain.model.IntraDayInfo
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 @AndroidEntryPoint
@@ -33,12 +36,15 @@ class CompanyDetailActivity : AppCompatActivity() {
         val bundle: Bundle? = intent.extras
         val symbol = bundle!!.getString("symbol")
 
-        lifecycleScope.launchWhenStarted {
-            companyDetailViewModel.state.collect { state ->
-                bindValue(state.companyInfo)
-                if (state.error != null) {
-                    withContext(Dispatchers.Main) {
-//                        Toast.makeText(this, "Error loading company information.", Toast.LENGTH_LONG).
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                companyDetailViewModel.state.collect { state ->
+                    val stockPrice = state.stockInfos.maxByOrNull { it.date.hour }
+                    bindValue(state.companyInfo, stockPrice)
+                    if (state.error != null) {
+                        withContext(Dispatchers.Main) {
+                            Toast.makeText(this@CompanyDetailActivity, "Error loading company information.", Toast.LENGTH_LONG).show()
+                        }
                     }
                 }
             }
@@ -46,17 +52,19 @@ class CompanyDetailActivity : AppCompatActivity() {
         Log.i("CompanyDetailActivity", "Data: ${companyDetailViewModel.state.value.companyInfo}")
     }
 
-    private fun bindValue(companyInfo: CompanyInfo?) {
+    private fun bindValue(companyInfo: CompanyInfo?, stockInfo: IntraDayInfo?) {
         val companyName = findViewById<TextView>(R.id.tvCompanyName)
         val companySymbol = findViewById<TextView>(R.id.tvCompanySymbol)
         val industry = findViewById<TextView>(R.id.tvIndustry)
         val country = findViewById<TextView>(R.id.tvCountry)
         val description = findViewById<TextView>(R.id.tvDescription)
+        val stockPrice = findViewById<TextView>(R.id.tvStockPrice)
 
         companyName.text = companyInfo?.name
         companySymbol.text = companyInfo?.symbol
-        industry.text = companyInfo?.industry
-        country.text = companyInfo?.country
-        description.text = companyInfo?.description
+        industry.text = "Industry: ${companyInfo?.industry}"
+        country.text = "Country: ${companyInfo?.country}"
+        description.text = "Description: ${companyInfo?.description}"
+        stockPrice.text = "Stock price: ${stockInfo?.close}"
     }
 }

@@ -1,5 +1,6 @@
 package com.luke.stockwatchlist.domain.repository
 
+import com.luke.stockwatchlist.data.local.CompanyListingEntity
 import com.luke.stockwatchlist.domain.model.CompanyInfo
 import com.luke.stockwatchlist.domain.model.CompanyListing
 import com.luke.stockwatchlist.domain.model.IntraDayInfo
@@ -20,6 +21,8 @@ interface StockRepository {
     suspend fun getCompanyInfo(
         symbol: String
     ): Resource<CompanyInfo>
+
+    suspend fun getWatchlistedCompanies(): List<CompanyListingEntity>
 
     suspend fun addToWatchlist(
         symbol: String

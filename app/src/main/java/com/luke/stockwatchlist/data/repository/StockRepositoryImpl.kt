@@ -5,6 +5,7 @@ import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresExtension
 import com.luke.stockwatchlist.data.csv.CSVParser
+import com.luke.stockwatchlist.data.local.CompanyListingEntity
 import com.luke.stockwatchlist.data.local.StockDatabase
 import com.luke.stockwatchlist.data.mapper.toCompanyInfo
 import com.luke.stockwatchlist.data.mapper.toCompanyListing
@@ -113,6 +114,10 @@ class StockRepositoryImpl @Inject constructor(
                 message = "Couldn't load intra-day info"
             )
         }
+    }
+
+    override suspend fun getWatchlistedCompanies(): List<CompanyListingEntity> {
+        return dao.getWatchlistedCompanies()
     }
 
     override suspend fun addToWatchlist(symbol: String) {

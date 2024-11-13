@@ -24,7 +24,7 @@ class CompanyListingsViewModel @Inject constructor(
     fun onEvent(event: CompanyListingsEvent) {
         when(event) {
             CompanyListingsEvent.Refresh -> {
-                getCompanyListings(fetchFromRemote = true)
+//                getCompanyListings(fetchFromRemote = true)
             }
             is CompanyListingsEvent.OnSearchQueryChange -> {
                 state.value = state.value.copy(searchQuery = event.query)
@@ -68,12 +68,6 @@ class CompanyListingsViewModel @Inject constructor(
     fun addToWatchlist(symbol: String) {
         viewModelScope.launch {
             repository.addToWatchlist(symbol)
-        }
-    }
-
-    fun removeFromWatchlist(symbol: String) {
-        viewModelScope.launch {
-            repository.removeFromWatchlist(symbol)
         }
     }
 

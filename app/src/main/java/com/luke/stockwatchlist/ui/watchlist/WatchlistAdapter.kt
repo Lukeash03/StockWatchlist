@@ -1,4 +1,4 @@
-package com.luke.stockwatchlist.ui.companyListing
+package com.luke.stockwatchlist.ui.watchlist
 
 import android.view.LayoutInflater
 import android.view.View
@@ -7,22 +7,17 @@ import android.widget.ImageButton
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.luke.stockwatchlist.R
-import com.luke.stockwatchlist.domain.model.CompanyListing
+import com.luke.stockwatchlist.data.local.CompanyListingEntity
 
-class CompanyListingsAdapter(
-    private var stockList: List<CompanyListing>,
+class WatchlistAdapter(
+    private var stockList: List<CompanyListingEntity>,
     private val onAddToWatchlistClick: (String) -> Unit, // Lambda function for adding to watchlist
-//    private val onRemoveFromWatchlistClick: (String) -> Unit // Lambda function for removing from watchlist
 ) :
-RecyclerView.Adapter<CompanyListingsAdapter.CompanyListingViewHolder>() {
+RecyclerView.Adapter<WatchlistAdapter.CompanyListingViewHolder>() {
 
     private var mListener: OnItemClickListener? = null
     interface OnItemClickListener {
         fun onItemClick(position: Int)
-    }
-
-    fun setOnItemClickListener(listener: OnItemClickListener) {
-        mListener = listener
     }
 
     class CompanyListingViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -31,13 +26,15 @@ RecyclerView.Adapter<CompanyListingsAdapter.CompanyListingViewHolder>() {
         val tvCompanySymbol: TextView = itemView.findViewById(R.id.tvCICompanySymbol)
         val ibAddToWatchlist: ImageButton = itemView.findViewById(R.id.imageButton)
 
-        fun bind(listener: OnItemClickListener?, position: Int, onAddClick: (String) -> Unit) {
+
+        fun bind(listener: OnItemClickListener?, position: Int, onRemoveClick: (String) -> Unit) {
             itemView.setOnClickListener {
                 listener?.onItemClick(position)
             }
 
+            ibAddToWatchlist.setImageResource(R.drawable.baseline_remove_24)
             ibAddToWatchlist.setOnClickListener {
-                onAddClick(tvCompanySymbol.text.toString())
+                onRemoveClick(tvCompanySymbol.text.toString())
             }
         }
     }
@@ -58,7 +55,7 @@ RecyclerView.Adapter<CompanyListingsAdapter.CompanyListingViewHolder>() {
         holder.bind(mListener, position, onAddToWatchlistClick)
     }
 
-    fun updateData(newStockList: List<CompanyListing>) {
+    fun updateData(newStockList: List<CompanyListingEntity>) {
         stockList = newStockList
         notifyDataSetChanged()
     }
