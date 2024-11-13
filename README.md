@@ -18,3 +18,15 @@
 - **Local Storage**: Room Database
 - **UI Components**: RecyclerView, Material Design Components, Bottom Navigation Bar
 - **Coroutine Support**: Used for asynchronous tasks
+
+## API Key Setup
+
+To use this project, you'll need an API key from [Alphavantage](https://www.alphavantage.co/support/#api-key).
+
+### Steps to Set Up
+
+1. Sign up for an API key from [Alphavantage](https://www.alphavantage.co/support/#api-key).
+2. Create a file named `.env` (or `local.properties` for Android projects) in the root of the project.
+3. Add your API key to the file as shown below:
+   ```properties
+   API_KEY=your_actual_api_key_here
